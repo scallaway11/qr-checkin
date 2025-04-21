@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Check-In</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 2em;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>📍 Getting your location...</h2>
+    <p id="status">Please allow location access.</p>
+
+<script>
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      fetch("https://script.google.com/macros/s/AKfycbzIbc0cVHBrgcprJUtg8C4hbhkoDEglO6yq3qC1qt3xvV-ZAMrZASjjQrH1Ev09-FthuQ/exec", {
+        method: "POST",
+        body: JSON.stringify({ lat, lon }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => res.text())
+      .then(msg => {
+        document.getElementById("status").innerText = "✅ Location sent!";
+        console.log("Success response from Apps Script:", msg);
+      })
+      .catch(err => {
+        console.error("❌ Fetch error:", err);
+        document.getElementById("status").innerText = "❌ Failed to send data.";
+      });
+    },
+    (err) => {
+      console.error("❌ Geolocation error:", err);
+      document.getElementById("status").innerText = "❌ Location access denied.";
+    }
+  );
+</script>
+  </body>
+</html>
