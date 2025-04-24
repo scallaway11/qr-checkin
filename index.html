@@ -29,8 +29,11 @@
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
 
-        // REDIRECT instead of fetch to avoid CORS
-        const url = `https://script.google.com/macros/s/AKfycbzIbc0cVHBrgcprJUtg8C4hbhkoDEglO6yq3qC1qt3xvV-ZAMrZASjjQrH1Ev09-FthuQ/exec?lat=${lat}&lon=${lon}`;
+        const params = new URLSearchParams(window.location.search);
+        params.set("lat", lat);
+        params.set("lon", lon);
+
+        const url = `https://script.google.com/macros/s/AKfycbzIbc0cVHBrgcprJUtg8C4hbhkoDEglO6yq3qC1qt3xvV-ZAMrZASjjQrH1Ev09-FthuQ/exec?${params.toString()}`;
         window.location.href = url;
       },
       (err) => {
